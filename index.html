@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Surprise 🎉</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #000;
+      overflow-x: hidden;
+      color: #fff;
+      position: relative;
+    }
+    header {
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #ff8ec4, #94b8ff);
+      border-radius: 0 0 20px 20px;
+    }
+    header h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.8rem;
+      animation: bounceIn 1.2s ease-out;
+    }
+    header p {
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+
+    .gallery {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      padding: 30px;
+      background: #111;
+    }
+    .gallery img {
+      width: 280px;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease-in-out;
+    }
+    .gallery img:hover {
+      transform: scale(1.08);
+    }
+
+    .message, .song-section, .video-section {
+      padding: 50px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #ff8ec4, #94b8ff);
+      margin: 20px;
+      border-radius: 20px;
+      opacity: 0;
+      transform: translateY(50px);
+      animation: fadeInUp 1s ease-out forwards;
+    }
+    .message { animation-delay: 0.5s; }
+    .song-section { animation-delay: 1s; }
+    .video-section { animation-delay: 1.5s; }
+
+    .message h2, .song-section h2, .video-section h2 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+    .message p, .song-section p, .video-section p {
+      font-size: 1rem;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .surprise-btn {
+      display: block;
+      margin: 30px auto;
+      padding: 14px 32px;
+      background: #ff4081;
+      color: #fff;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      animation: glow 1.5s infinite alternate;
+    }
+    .surprise-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .popup-content {
+      background: #fff;
+      color: #000;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 90%;
+    }
+    .popup-content h3 {
+      color: #ff4081;
+      margin-bottom: 15px;
+    }
+    .popup-content p, .popup-content blockquote {
+      font-size: 1rem;
+      margin-top: 10px;
+    }
+    .close-popup {
+      margin-top: 20px;
+      background: #ff4081;
+      color: white;
+      padding: 10px 22px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+
+    .hearts-global {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 999;
+    }
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center center/contain;
+      animation: floatHeart 6s linear infinite;
+    }
+
+    .music-control {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: #ff4081;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .balloon {
+      position: absolute;
+      width: 40px;
+      height: 60px;
+      background: radial-gradient(#ff9ed2, #ff4081);
+      border-radius: 50% 50% 45% 45%;
+      animation: floatBalloon 8s linear infinite;
+      z-index: 998;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #111;
+      color: #ccc;
+      font-size: 0.85rem;
+    }
+
+    /* Animations */
+    @keyframes floatHeart {
+      0% { transform: translateY(100%) scale(0.5); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-120%) scale(1.2); opacity: 0; }
+    }
+    @keyframes floatBalloon {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+    }
+    @keyframes bounceIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    @keyframes glow {
+      from { box-shadow: 0 0 10px #ff4081; }
+      to { box-shadow: 0 0 20px #ff4081, 0 0 30px #ff4081; }
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes dropConfetti {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    audio::-webkit-media-controls-panel {
+      background-color: #ffe4f0;
+      border-radius: 30px;
+    }
+
+    @media screen and (max-width: 600px) {
+      header h1 { font-size: 2rem; }
+      .message h2, .song-section h2 { font-size: 1.6rem; }
+      .message p, .song-section p { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+  <audio id="bg-music" loop autoplay>
+    <source src="song2.mp3" type="audio/mpeg">
+  </audio>
+  <button class="music-control" onclick="toggleMusic()">🔊</button>
+  <div class="hearts-global" id="hearts-global"></div>
+
+  <header>
+    <h1>🎉 A Magical Birthday Surprise 🎉</h1>
+    <p>For someone who lights up the world 💖</p>
+  </header>
+
+  <section class="gallery">
+    <img src="image6.avif" alt="photo1">
+    <img src="image5.jpeg" alt="photo2">
+    <img src="image4.jpg" alt="photo3">
+    <img src="image3.jpeg" alt="photo4">
+    <img src="image2.jpg" alt="photo5">
+  </section>
+
+  <section class="message">
+    <h2>💌 A Heartfelt Message 💌</h2>
+    <p>You are one of a kind — kind, beautiful, and deeply loved. May your special day overflow with happiness and unforgettable memories.</p>
+  </section>
+
+  <section class="song-section">
+    <h2>🎵 A Song for You 🎵</h2>
+    <p>Feel the joy and love in every beat.</p>
+    <div style="display: inline-block; padding: 10px; border-radius: 20px;">
+      <audio controls style="width: 300px; border-radius: 30px; outline: none;">
+        <source src="song.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  </section>
+
+  <section class="video-section">
+    <h2>🎬 A Special Video Just for You</h2>
+    <p>Press play and smile wide 🌟</p>
+    <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:15px;margin-top:15px">
+      <iframe src="vijay.mp4" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%"></iframe>
+    </div>
+  </section>
+
+  <button class="surprise-btn" onclick="openPopup()">🎁 Reveal Your Gift</button>
+
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <h3>💖 You Are Loved 💖</h3>
+      <p>A sweet surprise filled with warm wishes!</p>
+      <blockquote>"The world is brighter with you in it. Happy Birthday!"</blockquote>
+      <button class="close-popup" onclick="closePopup()">Close</button>
+    </div>
+  </div>
+
+  <footer>
+    Made with 💖 by <a href="https://www.instagram.com/WishesbyShanviii" target="_blank" style="color:#ff9ed2; text-decoration:none;">@WishesbyShanviii</a>
+  </footer>
+
+  <script>
+    const popup = document.getElementById('popup');
+    const music = document.getElementById("bg-music");
+    const btn = document.querySelector(".music-control");
+    const heartsContainer = document.getElementById("hearts-global");
+    let isPlaying = true;
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.style.left = Math.random() * 100 + "%";
+      heart.style.animationDelay = Math.random() * 5 + "s";
+      heartsContainer.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 250);
+
+    function createBalloon() {
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      balloon.style.left = Math.random() * window.innerWidth + 'px';
+      balloon.style.animationDuration = 6 + Math.random() * 4 + 's';
+      document.body.appendChild(balloon);
+      setTimeout(() => balloon.remove(), 8000);
+    }
+    setInterval(createBalloon, 800);
+
+    function confettiEffect() {
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.position = 'fixed';
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.top = '-10px';
+        confetti.style.width = '10px';
+        confetti.style.height = '10px';
+        confetti.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        confetti.style.animation = `dropConfetti 3s ease-out ${Math.random()}s forwards`;
+        confetti.style.zIndex = 1000;
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 4000);
+      }
+    }
+
+    function openPopup() {
+      popup.style.display = 'flex';
+      confettiEffect();
+    }
+    function closePopup() {
+      popup.style.display = 'none';
+    }
+    function toggleMusic() {
+      if (isPlaying) {
+        music.pause();
+        btn.textContent = "🔈";
+      } else {
+        music.play();
+        btn.textContent = "🔊";
+      }
+      isPlaying = !isPlaying;
+    }
+  </script>
+</body>
+</html>
